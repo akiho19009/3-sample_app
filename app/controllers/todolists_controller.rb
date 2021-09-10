@@ -4,19 +4,18 @@ class TodolistsController < ApplicationController
     @list = List.new
   end
 
-  # 以下を追加
-  def create
-    # １. データを新規登録するためのインスタンス作成
-    list = List.new(list_params)
-    # ２. データをデータベースに保存するためのsaveメソッド実行
-    list.save
-    # ３. トップ画面へリダイレクト
-    redirect_to todolist_path(list.id)
+    def create
+    @list = List.new(list_params)
+    if @list.save
+      redirect_to todolist_path(@list.id)
+    else
+      render :new
+    end
   end
+
 
   def index
     @lists = List.all
-
   end
 
   def show
@@ -39,4 +38,6 @@ class TodolistsController < ApplicationController
   def list_params
     params.require(:list).permit(:title, :body, :image)
   end
+
+
 end
